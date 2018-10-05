@@ -2,13 +2,16 @@ FROM node:8.9.1-alpine
 
 WORKDIR /usr/src/app
 
-# COPY ./proxy/package.json .
+VOLUME /var/logs
 
-RUN npm install -g npm yarn
+COPY . .
+
+RUN npm install -g yarn
+RUN yarn install
 
 EXPOSE 5000
 
-CMD [ "node", "proxy.js"]
+CMD [ "yarn", "start"]
 
 RUN apk add --no-cache openssl
 

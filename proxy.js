@@ -8,15 +8,21 @@ const morgan = require('morgan');
 const moment = require ('moment');
 var csvWriter = require('csv-write-stream')
 var fs = require('fs')
-var writer = csvWriter()
-
-
+// var writer = csvWriter()
 
 
 const proxy = httpProxy.createProxyServer({});
-const target = 'http://' + process.env.TO_HOST + ':' + process.env.TO_PORT
+const secure = process.env.TO_SECURE;
 
-var writer = csvWriter({ headers: [
+if (process.env.TO_SECURE) {
+  process.env.TO_PROTOCOL = 'https'
+} else {
+  process.env.TO_SECURE = false
+  process.env.TO_PROTOCOL = 'http'
+}
+const target = process.env.TO_PROTOCOL + '://' + process.env.TO_HOST + ':' + process.env.TO_PORT
+
+let writer = csvWriter({ headers: [
   'datahora',
   'originalUrl',
   'path',
@@ -45,24 +51,28 @@ JSON.stringtudo = function(obj) {
      return v;
   },2);
 }
-writer.pipe(fs.createWriteStream('./'+moment().format('YYMMDDhhmm')+'.csv'))
+// TODO: Atribuições do diretório
+// TODO: variação do protocolo de conexão [http vs https]
+// process.env.FILE_PATCH = process.env.FILE_PATCH ? process.env.FILE_PATCH : '/var/log'
+
+writer.pipe(fs.createWriteStream(process.env.FILE_PATCH + '/' + process.env.FILE_NAME + moment().format('YYMMDDhhmm') + '.csv'))
 
 const customLogger = (req, res, next) => {
   var loggedObject = [
     moment().format("YY/MM/DD hh:mm"),
-    req.originalUrl ? req.originalUrl : " ",
-    req.path ? req.path : " ",
-    req.baseUrl ? req.baseUrl : " ",
-    req.url ? req.url : " ",
-    req.method ? req.method : " ",
-    req.headers.authorization ? req.headers.authorization : " ",
-    req.headers.client_id ? req.headers.client_id : " ",
-    req.query.operationName ? req.query.operationName : " ",
-    req.query.variables ? req.query.variables : " ",
-    req.query.extensions ? req.query.extensions : " ",
-    req.body.operationName ? (JSON.parse(req.body.operationName) : " ",
-    req.body.variables ? (JSON.parse(req.body.variables) : " ",
-    req.body.query ? (JSON.parse(req.body.query) : " ",
+    (req.originalUrl || " "),
+    (req.path || " "),
+    (req.baseUrl || " "),
+    (req.url || " "),
+    (req.method || " "),
+    (req.headers.authorization || " "),
+    (req.headers.client_id || " "),
+    (req.query.operationName || " "),
+    (req.query.variables || " "),
+    (req.query.extensions || " "),
+    (req.body.operationName || " "),
+    (req.body.variables || " "),
+    (req.body.query || " "),
   ];
   console.log(loggedObject);
 
