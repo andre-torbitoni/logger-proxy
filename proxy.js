@@ -97,7 +97,7 @@ proxy.on("proxyReq", function(proxyReq, req, res, options) {
   }
 });
 
-const target = `${process.env.TARGET}:${process.env.TARGET_PORT}`;
+const target = process.env.TARGET;
 
 const proxyApp = express();
 proxyApp.use(bodyParser.json());
