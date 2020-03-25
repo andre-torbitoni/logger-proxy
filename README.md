@@ -27,6 +27,7 @@ yarn start
 |:---:|:---|:---|
 |TARGET|where the proxy will send the requests must contain protocol, host and port (if not 80)|http://localhost:8082|
 |FROM_PORT|port that the proxy will be listening |5000|
+|MONITOR_PORT|port that the monitor will be served|3000|
 |FILE_PATCH|path that the log will be stored|./logs|
 |FILE_NAME|prefix of the file name, all files are added by [filename + YYMMDDhhmm]|log|
 

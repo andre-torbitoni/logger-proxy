@@ -11,13 +11,18 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "bootstrap": "^4.4.1",
     "csv-write-stream": "^2.0.0",
     "dotenv": "^6.2.0",
     "express": "^4.16.3",
     "fs": "0.0.1-security",
     "http": "0.0.0",
     "http-proxy": "^1.17.0",
+    "jquery": "^3.4.1",
     "moment": "^2.22.2",
-    "morgan": "^1.9.1"
+    "morgan": "^1.9.1",
+    "socker.io": "^0.0.0-alpha-beta",
+    "socket-io": "^1.0.0",
+    "socket.io": "^2.3.0"
   }
 }

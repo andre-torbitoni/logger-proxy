@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Proxy Monitor</title>
+    <link rel="stylesheet" href="/assets/bootstrap/dist/css/bootstrap.min.css">
+    <script src="/assets/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/assets/socket.io-client/dist/socket.io.js"></script>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="table-responsive">
+            <table class="table table-fixed" id="request-table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Method</th>
+                        <th scope="col">URL</th>
+                        <!--<th scope="col">Headers</th> -->
+                        <th scope="col">Query</th>
+                        <th scope="col">Body</th>
+                        <th scope="col">Params</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+
+            let table;
+            i = 1;
+
+            function createRow(request) {
+
+                var today = new Date();
+                var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+                var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                var dateTime = date + ' ' + time;
+
+                const row = table.insertRow();
+                row.insertCell().innerHTML = i++;
+                row.insertCell().innerHTML = dateTime;
+                row.insertCell().innerHTML = request['method'];
+                row.insertCell().innerHTML = request['url'];
+                // row.insertCell().innerHTML = request['rawHeaders'];
+                row.insertCell().innerHTML = 'query' in request ? JSON.stringify(request['query']) : '';
+                row.insertCell().innerHTML = 'body' in request ? JSON.stringify(request['body']) : '';
+                row.insertCell().innerHTML = 'params' in request ? JSON.stringify(request['params']) : '';
+            }
+
+            const socket = io();
+            socket.on('request', function(request) {
+                table = document.getElementById('request-table').children[1]
+                createRow(JSON.parse(request))
+                window.scrollTo(0,document.body.scrollHeight); //scroll bottom
+            });
+        })
+    </script>
+</body>
+
+</html>

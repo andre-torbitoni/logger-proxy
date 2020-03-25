@@ -1,6 +1,6 @@
 "use strict";
-//  Importa as lib tudo
 require("dotenv").config();
+//  import lib
 const http = require("http");
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -26,7 +26,9 @@ const writer = csvWriter({
     "query.extensions",
     "body.operationName",
     "body.variables",
-    "body.query"
+    "body.query",
+    "query",
+    "params"
   ]
 });
 
@@ -57,7 +59,9 @@ const csvLogger = (req, res, next) => {
     req.query.extensions || " ",
     req.body.operationName || " ",
     req.body.variables || " ",
-    req.body.query || " "
+    req.body.query || " ",
+    req.query ? JSON.stringify(req.query) : " ",
+    req.params ? JSON.stringify(req.params) : " "
   ];
   //consolida na planilha
   writer.write(loggedObject);
@@ -111,6 +115,6 @@ proxyApp.use(function(req, res) {
 });
 
 http.createServer(proxyApp).listen(process.env.FROM_PORT, "0.0.0.0", () => {
-  console.log("Proxy server linsten on " + process.env.FROM_PORT);
+  console.log("Proxy server listening on " + process.env.FROM_PORT);
   console.log("Proxy server target on " + target);
 });
